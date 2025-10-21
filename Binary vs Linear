@@ -1,0 +1,120 @@
+//Code C for binary search and linear search, then compare the number of steps of these two searching methods
+
+#include <stdio.h>
+#define Max 100
+
+void swap(int *a, int *b){
+    int temp=*a;
+    *a=*b;
+    *b=temp;
+}
+
+void orderArray(int array[], int n){
+    for(int i=0; i<n; i++){
+        for(int j=i+1;j<n;j++){
+            if(array[i]>array[j]){
+                swap(&array[i],&array[j]);
+            }
+        }
+    }
+}
+
+void insertArray(int array[], int n){
+    for(int i=0; i<n; i++){
+        scanf("%d", &array[i]);
+    }
+}
+
+void insertDoubleArray(int array1[], int array2[], int n ){
+    for(int i=0; i<n; i++){
+        scanf("%d", &array1[i]);
+    }
+    orderArray(array1,n);
+    for(int i=0; i<n; i++){
+        array2[i]=array1[i];
+    }
+}
+
+void printArray(int array[], int n){
+    for(int i=0; i<n; i++){
+        printf("%d ", array[i]);
+    }
+}
+
+
+
+void addInArray(int array[], int *n, int index, int a){
+    *n=*n+1;
+    for(int i=0; i<*n; i++){
+        array[*n-i]=array[*n-i-1];
+        if(*n-i-1==index){
+            array[*n-i-1]=a;
+            break;
+        }
+    }
+}
+
+void linearAdd(int array[], int *n, int a, int *comps){
+    int count=0;
+    if(array[*n-1]<a){addInArray(array,n,*n,a);}
+    for(int i=0; i<*n;i++){
+        count++;
+        (*comps)=count;
+        if(array[i]>=a){addInArray(array,n,i,a);
+        return;
+        }
+    }
+}
+
+void binaryAdd(int array[], int *n, int a, int *comps){
+    int left=0;
+    int right=*n-1;
+    int mid=0;
+    while(left<=right){
+        mid=(left+right)/2;
+        (*comps)++;
+        if(array[mid]>a){
+            right=mid-1;
+        }
+        else if(array[mid]<a){
+            left=mid+1;
+        }
+        else{
+            addInArray(array,n,mid,a);
+            break;
+        }
+        
+    }
+    addInArray(array,n,left,a);
+}
+
+
+
+int main() {
+    int n;
+    int n1, n2;
+    int a;
+    int count1, count2=0;
+    printf("nhap so luong phan tu cua mang: ");
+    scanf("%d", &n);
+    n1=n;
+    n2=n;
+    int array1[Max], array2[Max];
+    printf("nhap phan tu cho cac mang: \n");
+    insertDoubleArray(array1,array2,n);
+    printf("\n");
+    printArray(array2,n2);
+    printf("\n");
+    printf("nhap gia tri can chen: \n");
+    scanf("%d", &a);
+    linearAdd(array1,&n1, a, &count1);
+    binaryAdd(array2,&n2, a, &count2);
+    printArray(array1,n1);
+    printf("\n");
+    printf("so buoc linear: %d ", count1);
+    printf("\n");
+    printArray(array2,n2);
+    printf("\n");
+    printf("so buoc binary: %d ", count2);
+    return 0;
+}
