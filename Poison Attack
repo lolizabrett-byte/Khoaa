@@ -1,0 +1,112 @@
+// Online C compiler to run C program online
+// Code C tim kiem ma doc trong chuoi ky tu
+
+#include <stdio.h>
+#include <string.h>
+#define Max 1000
+#define Max1 7
+#define Max2 100
+
+
+void inputPoisonStr(char str[][5], int n){
+    for(int i=0; i<n; i++){
+        scanf("%s", str[i]);
+    }
+}
+
+int searchPoiStr(char str[], char str1[], int array[]){
+    int check=0;
+    int logic=0;
+    int index=0;
+    for(int i=0; i<strlen(str); i++){
+        if(str[i]==str1[0]){
+            check=1;
+            for(int j=i;j<i+4;j++){
+                if(str[j]!=str1[j-i]){
+                    check = 0;
+                    break;
+                }
+            }
+            if(check==1){
+                array[index]=i;
+                index++;
+            }
+        }
+    }
+    if(index!=0){
+        logic=1;
+    }
+    array[index]=-1;
+    return logic;
+}
+
+int searchPoisonInMainStr(char str[], char str1[][5], int array[][Max2], int n){
+int found = 0;
+for (int i = 0; i < n; i++) {
+    if (searchPoiStr(str, str1[i], array[i])) {
+        found = 1;
+    } else {
+        array[i][0] = -1;
+    }
+}
+return found;
+}
+
+int countArray(int array[]){
+    int count=0;
+    while(array[count]!=-1){
+        count++;
+    }
+    return count;
+}
+
+void printString(char str[]){
+    for(int i=0;i<5; i++){
+        printf("%c", str[i]);
+    }
+}
+
+void printArray(int array[], int n){
+    for(int i=0; i<n; i++){
+        printf("%d ", array[i]);
+    }
+}
+
+void printInformation(char str[][5], int array[][Max2], int n){
+    for(int i=0; i<n; i++){
+        printf("Ma doc: ");
+        printString(str[i]);
+        printf("\n");
+        printf("so luong: %d", countArray(array[i]));
+        printf("\n");
+        printf("cac vi tri: \n");
+        printArray(array[i], countArray(array[i]));
+        printf("\n");
+    }
+}
+
+int main() {
+    char string[Max];
+    printf("nhap chuoi: ");
+    scanf("%s", string);
+    int n;
+    printf("nhap so luong ma doc: ");
+    scanf("%d", &n);
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+    printf("nhap cac ma doc: \n");
+    char str1[Max1][5];
+    inputPoisonStr(str1,n);
+    //tao mang luu vi tri cua cac ma doc
+    int array[Max1][Max2];
+    int logic;
+    logic=searchPoisonInMainStr(string,str1,array,n);
+    if(logic==0){
+        printf("Khong co ma doc");
+    }
+    else{
+        printf("Thong tin ma doc: \n");
+        printInformation(str1,array,n);
+    }
+    return 0;
+}
